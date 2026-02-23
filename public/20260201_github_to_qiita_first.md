@@ -4,7 +4,7 @@ tags:
   - AWS
   - NotebookLM
 private: true
-updated_at: '2026-02-01'
+updated_at: '2026-02-23T10:42:11+09:00'
 id: 214fcdf87e5f390f3d15
 organization_url_name: null
 slide: false
