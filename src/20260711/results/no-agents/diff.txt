@@ -1,0 +1,76 @@
+diff --git a/src/20260711/baseline/index.html b/src/20260711/experiments/no-agents/index.html
+--- a/src/20260711/baseline/index.html
++++ b/src/20260711/experiments/no-agents/index.html
+@@ -6,7 +6,7 @@
+-    form, li { display: flex; gap: .75rem; align-items: center; }
++    form, li, .filters { display: flex; gap: .75rem; align-items: center; }
+@@ -14,6 +14,11 @@
++    .filters { margin: 1rem 0; }
++    .priority { border-radius: 999px; padding: .15rem .55rem; font-size: .8rem; font-weight: bold; }
++    .priority-高 { background: #fee4e2; color: #b42318; }
++    .priority-中 { background: #fef0c7; color: #93370d; }
++    .priority-低 { background: #d1fadf; color: #05603a; }
+@@ -22,9 +27,19 @@
++      <label for="task-priority">優先度</label>
++      <select id="task-priority">
++        <option>高</option><option selected>中</option><option>低</option>
++      </select>
++    <div class="filters">
++      <label for="priority-filter">優先度で絞り込み</label>
++      <select id="priority-filter">
++        <option>すべて</option><option>高</option><option>中</option><option>低</option>
++      </select>
++    </div>
+diff --git a/src/20260711/baseline/src/app.js b/src/20260711/experiments/no-agents/src/app.js
+--- a/src/20260711/baseline/src/app.js
++++ b/src/20260711/experiments/no-agents/src/app.js
+@@ -1,13 +1,15 @@
+-import { createTask, deleteTask, toggleTask } from './taskManager.js';
++import { createTask, deleteTask, filterTasks, toggleTask } from './taskManager.js';
++const priority = document.querySelector('#task-priority');
++const priorityFilter = document.querySelector('#priority-filter');
+-  taskList.replaceChildren(...tasks.map((task) => {
++  taskList.replaceChildren(...filterTasks(tasks, priorityFilter.value).map((task) => {
+@@ -21,7 +23,10 @@
+-    label.append(checkbox, title);
++    const badge = document.createElement('span');
++    badge.className = `priority priority-${task.priority}`;
++    badge.textContent = task.priority;
++    label.append(checkbox, title, badge);
+@@ -30,7 +35,7 @@
+-    tasks = [...tasks, createTask(input.value)];
++    tasks = [...tasks, createTask(input.value, priority.value)];
+@@ -38,3 +43,5 @@
++priorityFilter.addEventListener('change', render);
+diff --git a/src/20260711/baseline/src/taskManager.js b/src/20260711/experiments/no-agents/src/taskManager.js
+--- a/src/20260711/baseline/src/taskManager.js
++++ b/src/20260711/experiments/no-agents/src/taskManager.js
+@@ -1,7 +1,10 @@
+-export function createTask(title) {
++export const PRIORITIES = ['高', '中', '低'];
++export function createTask(title, priority = '中') {
++  if (!PRIORITIES.includes(priority)) throw new Error('優先度が不正です');
+-  return { id: crypto.randomUUID(), title: normalizedTitle, completed: false };
++  return { id: crypto.randomUUID(), title: normalizedTitle, completed: false, priority };
+@@ -11,3 +14,7 @@
++export function filterTasks(tasks, priority) {
++  return priority === 'すべて' ? tasks : tasks.filter((task) => task.priority === priority);
++}
+diff --git a/src/20260711/baseline/tests/taskManager.test.js b/src/20260711/experiments/no-agents/tests/taskManager.test.js
+--- a/src/20260711/baseline/tests/taskManager.test.js
++++ b/src/20260711/experiments/no-agents/tests/taskManager.test.js
+@@ -1,6 +1,6 @@
+-import { createTask, deleteTask, toggleTask } from '../src/taskManager.js';
++import { createTask, deleteTask, filterTasks, toggleTask } from '../src/taskManager.js';
+@@ -21,3 +21,17 @@
++test('優先度を指定してタスクを作成できる', () => {
++  assert.equal(createTask('重要な作業', '高').priority, '高');
++});
++test('不正な優先度を拒否する', () => {
++  assert.throws(() => createTask('作業', '最優先'), /優先度/);
++});
++test('優先度でタスクを絞り込める', () => {
++  const tasks = [createTask('急ぎ', '高'), createTask('通常', '中')];
++  assert.deepEqual(filterTasks(tasks, '高').map((task) => task.title), ['急ぎ']);
++  assert.equal(filterTasks(tasks, 'すべて').length, 2);
++});

@@ -1,0 +1,31 @@
+﻿git : warning: LF will be replaced by CRLF in src\20260711\baseline/index.html.
+発生場所 行:2 文字:194
++ ... \diff.txt'; git diff --no-index --stat -- src\20260711\baseline src\2 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: LF wil...ine/index.html.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\minimal-agents/index.html.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\minimal-agents/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\minimal-agents/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\minimal-agents/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\minimal-agents/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+ .../index.html"                                    | 19 +++++++++++++++++++
+ .../src/app.js"                                    | 16 ++++++++++++----
+ .../src/taskManager.js"                            | 13 +++++++++++--
+ .../tests/taskManager.test.js"                     | 22 +++++++++++++++++++++-
+ 4 files changed, 63 insertions(+), 7 deletions(-)

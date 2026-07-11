@@ -1,0 +1,27 @@
+> test
+> node --test
+
+TAP version 13
+# Subtest: 正常なタスクを作成できる
+ok 1 - 正常なタスクを作成できる
+# Subtest: 空文字や空白だけのタスクを拒否する
+ok 2 - 空文字や空白だけのタスクを拒否する
+# Subtest: 完了状態を切り替えられる
+ok 3 - 完了状態を切り替えられる
+# Subtest: タスクを削除できる
+ok 4 - タスクを削除できる
+# Subtest: 優先度を指定してタスクを作成できる
+ok 5 - 優先度を指定してタスクを作成できる
+# Subtest: 不正な優先度を拒否する
+ok 6 - 不正な優先度を拒否する
+# Subtest: 優先度でタスクを絞り込める
+ok 7 - 優先度でタスクを絞り込める
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.7151

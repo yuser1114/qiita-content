@@ -1,0 +1,26 @@
+ .../index.html"                                    | 20 ++++++++++++++++++
+ .../src/app.js"                                    | 16 +++++++++++----
+ .../src/taskManager.js"                            | 13 ++++++++++--
+ .../tests/taskManager.test.js"                     | 24 +++++++++++++++++++++-
+ 4 files changed, 66 insertions(+), 7 deletions(-)
+warning: LF will be replaced by CRLF in src\20260711\baseline/index.html.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/index.html.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+

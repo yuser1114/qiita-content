@@ -1,0 +1,55 @@
+
+> test
+> node --test
+
+TAP version 13
+# Subtest: 正常なタスクを作成できる
+ok 1 - 正常なタスクを作成できる
+  ---
+  duration_ms: 2.8798
+  ...
+# Subtest: 空文字や空白だけのタスクを拒否する
+ok 2 - 空文字や空白だけのタスクを拒否する
+  ---
+  duration_ms: 0.3315
+  ...
+# Subtest: 完了状態を切り替えられる
+ok 3 - 完了状態を切り替えられる
+  ---
+  duration_ms: 0.1509
+  ...
+# Subtest: タスクを削除できる
+ok 4 - タスクを削除できる
+  ---
+  duration_ms: 0.4894
+  ...
+# Subtest: 指定した優先度でタスクを作成できる
+ok 5 - 指定した優先度でタスクを作成できる
+  ---
+  duration_ms: 0.1806
+  ...
+# Subtest: 優先度を省略した場合は中になる
+ok 6 - 優先度を省略した場合は中になる
+  ---
+  duration_ms: 0.1118
+  ...
+# Subtest: 不正な優先度を拒否する
+ok 7 - 不正な優先度を拒否する
+  ---
+  duration_ms: 0.1319
+  ...
+# Subtest: 優先度で絞り込み、すべてで解除できる
+ok 8 - 優先度で絞り込み、すべてで解除できる
+  ---
+  duration_ms: 0.2784
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 80.14
+

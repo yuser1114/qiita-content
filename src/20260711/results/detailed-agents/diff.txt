@@ -1,0 +1,177 @@
+diff --git "a/src\\20260711\\baseline/index.html" "b/src\\20260711\\experiments\\detailed-agents/index.html"
+index 0c01fcd..9d38dcd 100644
+--- "a/src\\20260711\\baseline/index.html"
++++ "b/src\\20260711\\experiments\\detailed-agents/index.html"
+@@ -14,6 +14,11 @@
+     label { display: flex; gap: .6rem; align-items: center; }
+     .completed { text-decoration: line-through; color: #777; }
+     #message { min-height: 1.5em; color: #b42318; }
++    .filters { margin: 1rem 0; }
++    .priority { padding: .15rem .45rem; border-radius: .25rem; font-size: .85rem; }
++    .priority-高 { background: #fee2e2; color: #991b1b; }
++    .priority-中 { background: #fef3c7; color: #92400e; }
++    .priority-低 { background: #dcfce7; color: #166534; }
+   </style>
+ </head>
+ <body>
+@@ -22,9 +27,24 @@
+     <form id="task-form">
+       <label for="task-title">タスク名</label>
+       <input id="task-title" type="text" autocomplete="off">
++      <label for="task-priority">優先度</label>
++      <select id="task-priority">
++        <option value="高">高</option>
++        <option value="中" selected>中</option>
++        <option value="低">低</option>
++      </select>
+       <button type="submit">追加</button>
+     </form>
+     <p id="message" role="alert"></p>
++    <div class="filters">
++      <label for="priority-filter">優先度で絞り込む</label>
++      <select id="priority-filter">
++        <option value="すべて">すべて</option>
++        <option value="高">高</option>
++        <option value="中">中</option>
++        <option value="低">低</option>
++      </select>
++    </div>
+     <ul id="task-list"></ul>
+   </main>
+   <script type="module" src="./src/app.js"></script>
+diff --git "a/src\\20260711\\baseline/src/app.js" "b/src\\20260711\\experiments\\detailed-agents/src/app.js"
+index e71d29d..174f70c 100644
+--- "a/src\\20260711\\baseline/src/app.js"
++++ "b/src\\20260711\\experiments\\detailed-agents/src/app.js"
+@@ -1,13 +1,16 @@
+-import { createTask, deleteTask, toggleTask } from './taskManager.js';
++import { createTask, deleteTask, filterTasksByPriority, toggleTask } from './taskManager.js';
+ 
+ const form = document.querySelector('#task-form');
+ const input = document.querySelector('#task-title');
++const priorityInput = document.querySelector('#task-priority');
++const priorityFilter = document.querySelector('#priority-filter');
+ const taskList = document.querySelector('#task-list');
+ const message = document.querySelector('#message');
+ let tasks = [];
+ 
+ function render() {
+-  taskList.replaceChildren(...tasks.map((task) => {
++  const visibleTasks = filterTasksByPriority(tasks, priorityFilter.value);
++  taskList.replaceChildren(...visibleTasks.map((task) => {
+     const item = document.createElement('li');
+     const label = document.createElement('label');
+     const checkbox = document.createElement('input');
+@@ -17,11 +20,14 @@ function render() {
+     const title = document.createElement('span');
+     title.textContent = task.title;
+     if (task.completed) title.classList.add('completed');
++    const priority = document.createElement('span');
++    priority.className = `priority priority-${task.priority}`;
++    priority.textContent = task.priority;
+     const removeButton = document.createElement('button');
+     removeButton.type = 'button';
+     removeButton.textContent = '削除';
+     removeButton.addEventListener('click', () => { tasks = deleteTask(tasks, task.id); render(); });
+-    label.append(checkbox, title);
++    label.append(checkbox, title, priority);
+     item.append(label, removeButton);
+     return item;
+   }));
+@@ -30,7 +36,7 @@ function render() {
+ form.addEventListener('submit', (event) => {
+   event.preventDefault();
+   try {
+-    tasks = [...tasks, createTask(input.value)];
++    tasks = [...tasks, createTask(input.value, priorityInput.value)];
+     input.value = '';
+     message.textContent = '';
+     render();
+@@ -38,3 +44,5 @@ form.addEventListener('submit', (event) => {
+     message.textContent = error.message;
+   }
+ });
++
++priorityFilter.addEventListener('change', render);
+diff --git "a/src\\20260711\\baseline/src/taskManager.js" "b/src\\20260711\\experiments\\detailed-agents/src/taskManager.js"
+index d9c516b..517847a 100644
+--- "a/src\\20260711\\baseline/src/taskManager.js"
++++ "b/src\\20260711\\experiments\\detailed-agents/src/taskManager.js"
+@@ -1,7 +1,16 @@
+-export function createTask(title) {
++export const PRIORITIES = ['高', '中', '低'];
++
++export function createTask(title, priority = '中') {
+   const normalizedTitle = title.trim();
+   if (!normalizedTitle) throw new Error('タスク名を入力してください');
+-  return { id: crypto.randomUUID(), title: normalizedTitle, completed: false };
++  if (!PRIORITIES.includes(priority)) throw new Error('優先度が不正です');
++  return { id: crypto.randomUUID(), title: normalizedTitle, priority, completed: false };
++}
++
++export function filterTasksByPriority(tasks, priority) {
++  if (priority === 'すべて') return tasks;
++  if (!PRIORITIES.includes(priority)) throw new Error('優先度が不正です');
++  return tasks.filter((task) => task.priority === priority);
+ }
+ 
+ export function toggleTask(tasks, id) {
+diff --git "a/src\\20260711\\baseline/tests/taskManager.test.js" "b/src\\20260711\\experiments\\detailed-agents/tests/taskManager.test.js"
+index a6d28ab..be60d42 100644
+--- "a/src\\20260711\\baseline/tests/taskManager.test.js"
++++ "b/src\\20260711\\experiments\\detailed-agents/tests/taskManager.test.js"
+@@ -1,6 +1,6 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import { createTask, deleteTask, toggleTask } from '../src/taskManager.js';
++import { createTask, deleteTask, filterTasksByPriority, toggleTask } from '../src/taskManager.js';
+ 
+ test('正常なタスクを作成できる', () => {
+   const task = createTask('資料を読む');
+@@ -21,3 +21,25 @@ test('タスクを削除できる', () => {
+   const task = createTask('削除する');
+   assert.deepEqual(deleteTask([task], task.id), []);
+ });
++
++test('指定した優先度でタスクを作成できる', () => {
++  const task = createTask('急ぎの作業', '高');
++  assert.equal(task.priority, '高');
++});
++
++test('優先度を省略した場合は中になる', () => {
++  assert.equal(createTask('通常の作業').priority, '中');
++});
++
++test('不正な優先度を拒否する', () => {
++  assert.throws(() => createTask('作業', '最優先'), /優先度/);
++});
++
++test('優先度で絞り込み、すべてで解除できる', () => {
++  const high = createTask('高の作業', '高');
++  const low = createTask('低の作業', '低');
++  const tasks = [high, low];
++  assert.deepEqual(filterTasksByPriority(tasks, '高'), [high]);
++  assert.deepEqual(filterTasksByPriority(tasks, 'すべて'), tasks);
++  assert.throws(() => filterTasksByPriority(tasks, '最優先'), /優先度/);
++});
+warning: LF will be replaced by CRLF in src\20260711\baseline/index.html.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/index.html.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/package.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/src/app.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/src/taskManager.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\baseline/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in src\20260711\experiments\detailed-agents/tests/taskManager.test.js.
+The file will have its original line endings in your working directory
+

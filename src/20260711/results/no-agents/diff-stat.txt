@@ -1,0 +1,5 @@
+ .../index.html"                                         | 17 ++++++++++++++++-
+ .../src/app.js"                                         | 15 +++++++++++----
+ .../src/taskManager.js"                                 | 11 +++++++++--
+ .../tests/taskManager.test.js"                          | 16 +++++++++++++++-
+ 4 files changed, 51 insertions(+), 8 deletions(-)

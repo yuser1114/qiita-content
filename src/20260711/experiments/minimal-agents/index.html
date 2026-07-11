@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>タスク管理</title>
+  <style>
+    body { font-family: sans-serif; max-width: 42rem; margin: 3rem auto; padding: 0 1rem; color: #222; }
+    form, li { display: flex; gap: .75rem; align-items: center; }
+    input[type="text"] { flex: 1; padding: .6rem; }
+    button { padding: .5rem .8rem; cursor: pointer; }
+    ul { padding: 0; }
+    li { justify-content: space-between; padding: .7rem 0; border-bottom: 1px solid #ddd; }
+    label { display: flex; gap: .6rem; align-items: center; }
+    .completed { text-decoration: line-through; color: #777; }
+    .priority { padding: .15rem .45rem; border-radius: 999px; color: #fff; font-size: .8rem; }
+    .priority-高 { background: #b42318; }
+    .priority-中 { background: #b54708; }
+    .priority-低 { background: #067647; }
+    #message { min-height: 1.5em; color: #b42318; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>タスク管理</h1>
+    <form id="task-form">
+      <label for="task-title">タスク名</label>
+      <input id="task-title" type="text" autocomplete="off">
+      <label for="task-priority">優先度</label>
+      <select id="task-priority">
+        <option value="高">高</option>
+        <option value="中" selected>中</option>
+        <option value="低">低</option>
+      </select>
+      <button type="submit">追加</button>
+    </form>
+    <p>
+      <label for="priority-filter">優先度で絞り込み</label>
+      <select id="priority-filter">
+        <option value="すべて">すべて</option>
+        <option value="高">高</option>
+        <option value="中">中</option>
+        <option value="低">低</option>
+      </select>
+    </p>
+    <p id="message" role="alert"></p>
+    <ul id="task-list"></ul>
+  </main>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
